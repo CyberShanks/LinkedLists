@@ -1,17 +1,14 @@
-finalapp: linkedlists.o save.o
-	gcc -o finalapp linkedlists.o save.o
+ll: linkedlist.o driver.o
+	gcc -o ll linkedlist.o driver.o
 
-linkedlists.o: linkedlists.c
-	gcc -c linkedlists.c
+linkedlist.o: linkedlist.c
+	gcc -c linkedlist.c
 
-save.o: save.c
-	gcc -c save.c
-
-ll: linkedlists.c
-	gcc -o ll linkedlists.c
+driver.o: driver.c
+	gcc -c driver.c
 
 save: save.c
 	gcc -o save save.c
 
 clean:
-	rm -f *.o finalapp
+	rm -f *.o
