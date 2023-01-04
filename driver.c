@@ -20,7 +20,7 @@ int menu()
     printf("2.Display Linked List\n");
     printf("3.Access Value at a Position\n");
     printf("4.Reverse Linked List?\n");
-    printf(".Save Current Linked List\n");
+    printf("5.Save Current Linked List\n");
     printf("8.Exit\n>> ");
     scanf("%d", &choice);
     switch (choice)
@@ -90,10 +90,12 @@ int menu()
             break;
         case 2:
             printf("Deleting...\n");
-            if (nodeNum == 0){
+            if (nodeNum == 0)
+            {
                 headDelete(&head);
             }
-            else{
+            else
+            {
                 nodeDeletion(node);
             }
             printf("Complete!\n");
@@ -106,7 +108,24 @@ int menu()
         head = reverseLinkedList(head);
         break;
     case 5:
-        // reverseLinkedList();
+        // first find length and numlength of ll
+        int numLength = 0;
+        int length;
+        length = llength(head, &numLength);
+        testnode(head);
+        displayLinkedList(head);
+        printf("len=%d, numlength=%d\n", length, numLength);
+        // initialize buffer using this length
+        char *Buffer;
+        Buffer = (char *)calloc(length + numLength + 1, sizeof(char));
+        if (Buffer == NULL)
+        {
+            perror("calloc failed");
+        }
+
+        // pass buffer to function
+        l2SConverter(head, Buffer);
+        saveLinkedListString(Buffer);
         break;
     case 7:
         // probably use message queue to store the linked list

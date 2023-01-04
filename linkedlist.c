@@ -31,7 +31,6 @@ node *createLinkedList()
         {
             return head;
         }
-        
     }
 }
 
@@ -41,9 +40,9 @@ void displayLinkedList(node *head)
     node *temp = head;
     for (; temp->next != 0; temp = temp->next)
     {
-        printf("|%d|->", temp->data);
+        printf("|%d|%d|->", temp->data, temp->next);
     }
-    printf("|%d|", temp->data);
+    printf("|%d|%d|", temp->data, temp->next);
 }
 
 // returns a pointer to the nodenumber
@@ -75,8 +74,9 @@ void nodeDeletion(node *prevNode)
     free(nextnode);
 }
 
-//deletes the head node
-void headDelete(node **head){
+// deletes the head node
+void headDelete(node **head)
+{
     node *temp = *head;
     *head = (*head)->next;
     free(temp);
@@ -91,8 +91,6 @@ void headInsert(node **head, int insertValue)
     newnode->next = *head;
     *head = newnode;
 }
-
-
 
 // reverses linked list and returns head
 node *reverseLinkedList(node *currentHead)
@@ -131,8 +129,37 @@ node *reverseLinkedList(node *currentHead)
     }
 }
 
-//prints out all info about the node it is called with
+// prints out all info about the node it is called with
 void testnode(node *node)
 {
     printf(">>|%d|%d|\n%d\n\n", node->data, node->next, node);
+}
+
+// pass pointer to int arr which has stored all the values
+node *loadLinkedList(int *arrptr)
+{
+    node *head, *newnode, *temp;
+    head = 0;
+    for (int i = 0; temp->data != 0; i++)
+    {
+        if (*(arrptr+i) != 0)
+        {
+            newnode = (node *)malloc(sizeof(node));
+            newnode->data = *(arrptr+i);
+            newnode->next = 0;
+            if (head == 0)
+            {
+                head = temp = newnode;
+            }
+            else
+            {
+                temp->next = newnode;
+                temp = newnode;
+            }
+        }
+        else
+        {
+            return head;
+        }
+    }
 }
