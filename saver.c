@@ -19,12 +19,15 @@
 //pass it pointer to ll-int-string
 int saveLinkedListString(char *arr)
 {
+    struct stat sb;
     int fd;
     void *file_memory;
     int length = strlen(arr);
 
     /* Prepare a file large enough to hold an unsigned integer. */
-    fd = open(COUNTER_FILE, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+    int PageSize = (int)sysconf(_SC_PAGESIZE);
+    printf("PageSize = %d\n", PageSize);
+    fd = open(COUNTER_FILE, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd < 0)
     {
         perror("open failed");
@@ -42,6 +45,14 @@ int saveLinkedListString(char *arr)
             size_t bytesWritten = write(fd, " ", 1);
         }
 
+    if (fstat(fd, &sb) == -1){
+        perror("file stat error");
+    }
+    else
+    {
+        printf("filesize = %ld\n", sb.st_size);
+    }
+    
     /* Create the memory mapping. */
 
     file_memory = mmap(0, length, PROT_WRITE, MAP_SHARED, fd, 0);
@@ -49,6 +60,14 @@ int saveLinkedListString(char *arr)
     {
         perror("mmap failed");
         exit(2);
+    }
+
+     if (fstat(fd, &sb) == -1){
+        perror("file stat error");
+    }
+    else
+    {
+        printf("filesize = %ld\n", sb.st_size);
     }
 
     memcpy (file_memory, arr, length+1);
@@ -76,7 +95,7 @@ void l2SConverter(node *head, char *buffer)
 /*returns length and ref calls NUMLENGTH
 used to allocate exact space to buffer -> buffer[length + numlength]
 */
-int llength(node *head, int *numlength)
+int llLength(node *head, int *numlength)
 {
     int length = 0;
     int tempNumLength = 0;
