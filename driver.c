@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ll.h"
+#include "misc.h"
 
 int main(int argc, char const *argv[])
 {
@@ -109,12 +110,9 @@ int menu()
         break;
     case 5:
         // first find length and numlength of ll
-        int numLength = 0;
-        int length;
-        length = llength(head, &numLength);
-        testnode(head);
-        displayLinkedList(head);
-        printf("len=%d, numlength=%d\n", length, numLength);
+        int lengthResultArr[3];
+        llLength(head, lengthResultArr);
+        int length = lengthResultArr[0], numLength = lengthResultArr[1], maxNumLength = lengthResultArr[2];
         // initialize buffer using this length
         char *Buffer;
         Buffer = (char *)calloc(length + numLength + 1, sizeof(char));
@@ -124,8 +122,8 @@ int menu()
         }
 
         // pass buffer to function
-        l2SConverter(head, Buffer);
-        saveLinkedListString(Buffer);
+        l2SConverter(head, Buffer, maxNumLength);
+        saveString(Buffer);
         break;
     case 7:
         // probably use message queue to store the linked list

@@ -40,9 +40,9 @@ void displayLinkedList(node *head)
     node *temp = head;
     for (; temp->next != 0; temp = temp->next)
     {
-        printf("|%d|%d|->", temp->data, temp->next);
+        printf("|%d|%p|->", temp->data, temp->next);
     }
-    printf("|%d|%d|", temp->data, temp->next);
+    printf("|%d|%p|", temp->data, temp->next);
 }
 
 // returns a pointer to the nodenumber
@@ -132,7 +132,7 @@ node *reverseLinkedList(node *currentHead)
 // prints out all info about the node it is called with
 void testnode(node *node)
 {
-    printf(">>|%d|%d|\n%d\n\n", node->data, node->next, node);
+    printf(">>|%d|%p|\n%p\n\n", node->data, node->next, node);
 }
 
 // pass pointer to int arr which has stored all the values
@@ -162,4 +162,34 @@ node *loadLinkedList(int *arrptr)
             return head;
         }
     }
+}
+
+/*call with head and lengthArr
+lengthArr = [length, totalNumLength, maxNumLength]
+*/
+void llLength(node *head, int *lengthArr)
+{
+    int length = 0;
+    int totalNumLength = 0;
+    int tempStore;
+    int maxNumLength = 1;
+    for (node *temp = head; temp != 0; temp = temp->next)
+    {
+        tempStore = temp->data;
+        int numLength = 0;
+        while (tempStore > 0)
+        {
+            numLength++;
+            tempStore /= 10;
+        }
+        length++;
+        if (numLength > maxNumLength)
+        {
+            maxNumLength = numLength;
+        }
+        totalNumLength += numLength;
+    }
+    lengthArr[0] = length;
+    lengthArr[1] = totalNumLength;
+    lengthArr[2] = maxNumLength;
 }

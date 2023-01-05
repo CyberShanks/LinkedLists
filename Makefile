@@ -1,8 +1,8 @@
-test: saver.o driver.o linkedlist.o
-	gcc -o lltest saver.o linkedlist.o driver.o
+test: misc.o driver.o linkedlist.o
+	gcc -o lltest misc.o linkedlist.o driver.o
 
-saver.o: saver.c
-	gcc -c saver.c
+misc.o: misc.c
+	gcc -c misc.c
 
 ll: linkedlist.o driver.o
 	gcc -o ll linkedlist.o driver.o
@@ -13,8 +13,8 @@ linkedlist.o: linkedlist.c
 driver.o: driver.c
 	gcc -c driver.c
 
-save: saver.c
-	gcc -o save saver.c
+misc: misc.c
+	gcc -o save misc.c
 
 clean:
 	rm -f *.o
