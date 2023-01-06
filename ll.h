@@ -1,3 +1,8 @@
+/*
+AdvancedLinkedList - Linked Lists with Save/Load Function
+Copyright (C) 2023 Shashank M. 
+*/
+
 #ifndef ll
 #define ll
 
@@ -17,7 +22,6 @@ void headInsert(node **, int);
 void headDelete(node **);
 node *reverseLinkedList(node *);
 void testnode(node *);
-node *loadLinkedList(int *);
 void llLength(node *, int *);
 
 #endif
@@ -35,5 +39,12 @@ void llLength(node *, int *);
 #define stdlib
 
 #include <stdlib.h>
+
+#endif
+
+#ifndef string
+#define string
+
+#include <string.h>
 
 #endif

@@ -1,3 +1,8 @@
+/*
+AdvancedLinkedList - Linked Lists with Save/Load Function
+Copyright (C) 2023 Shashank M. 
+*/
+
 #include <stdlib.h>
 #include "ll.h"
 
@@ -40,9 +45,9 @@ void displayLinkedList(node *head)
     node *temp = head;
     for (; temp->next != 0; temp = temp->next)
     {
-        printf("|%d|%p|->", temp->data, temp->next);
+        printf("|%d|->", temp->data);
     }
-    printf("|%d|%p|", temp->data, temp->next);
+    printf("|%d|", temp->data);
 }
 
 // returns a pointer to the nodenumber
@@ -92,7 +97,9 @@ void headInsert(node **head, int insertValue)
     *head = newnode;
 }
 
-// reverses linked list and returns head
+/*Traverse current ll, simultaneously creating another ll with reverse link.
+Returns a new ll.
+*/
 node *reverseLinkedList(node *currentHead)
 {
     node *temp, *newnode, *prevNode, *newPrevNode;
@@ -129,39 +136,10 @@ node *reverseLinkedList(node *currentHead)
     }
 }
 
-// prints out all info about the node it is called with
+// testfunction to test a node
 void testnode(node *node)
 {
     printf(">>|%d|%p|\n%p\n\n", node->data, node->next, node);
-}
-
-// pass pointer to int arr which has stored all the values
-node *loadLinkedList(int *arrptr)
-{
-    node *head, *newnode, *temp;
-    head = 0;
-    for (int i = 0; temp->data != 0; i++)
-    {
-        if (*(arrptr+i) != 0)
-        {
-            newnode = (node *)malloc(sizeof(node));
-            newnode->data = *(arrptr+i);
-            newnode->next = 0;
-            if (head == 0)
-            {
-                head = temp = newnode;
-            }
-            else
-            {
-                temp->next = newnode;
-                temp = newnode;
-            }
-        }
-        else
-        {
-            return head;
-        }
-    }
 }
 
 /*call with head and lengthArr

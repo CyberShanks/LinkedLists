@@ -1,3 +1,8 @@
+/*
+AdvancedLinkedList - Linked Lists with Save/Load Function
+Copyright (C) 2023 Shashank M. 
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "ll.h"
@@ -17,18 +22,18 @@ int menu()
     int choice;
     printf("\n----------\n");
     printf("Choose Action\n");
-    printf("1.Initialize Linked List\n");
+    printf("1.New Linked List\n");
     printf("2.Display Linked List\n");
-    printf("3.Access Value at a Position\n");
-    printf("4.Reverse Linked List?\n");
-    printf("5.Save Current Linked List\n");
+    printf("3.Access(Edit) Node\n");
+    printf("4.Reverse Linked List\n");
+    printf("5.Save Linked List\n");
     printf("6.Load Linked List\n");
+    printf("7.License\n");
     printf("8.Exit\n>> ");
     scanf("%d", &choice);
     switch (choice)
     {
         node *head, *node;
-        int nodeNum, accessChoice, insertValue, insertChoice;
     case 1:
         head = createLinkedList();
         printf("Linked List has been created\n");
@@ -38,7 +43,8 @@ int menu()
         displayLinkedList(head);
         break;
     case 3:
-        printf("Enter Node Number to be accessed\n>> ");
+        int nodeNum, accessChoice, insertValue, insertChoice;
+        printf("Enter Node Number\n>> ");
         scanf("%d", &nodeNum);
         // write exception for when nodenum is 0
         node = accessNode(head, nodeNum - 1);
@@ -51,7 +57,7 @@ int menu()
             printf("Value at %d = |%d|\n", nodeNum, (node->next)->data);
         }
 
-        printf("Which Operation do you want to perform at this Node\n");
+        printf("Operation at Node %d\n", nodeNum);
         printf("1.Insertion\n");
         printf("2.Deletion\n");
         printf("3.Nothing\n>> ");
@@ -89,6 +95,7 @@ int menu()
                 }
             }
             printf("Done!\n");
+            displayLinkedList(head);
             break;
         case 2:
             printf("Deleting...\n");
@@ -101,13 +108,18 @@ int menu()
                 nodeDeletion(node);
             }
             printf("Complete!\n");
+            displayLinkedList(head);
+            break;
+        case 3:
             break;
         default:
+            printf("Please Chose a valid option");
             break;
         }
         break;
     case 4:
         head = reverseLinkedList(head);
+        displayLinkedList(head);
         break;
     case 5:
         // first find length and numlength of ll
@@ -123,12 +135,17 @@ int menu()
         }
 
         // pass buffer to function
-        l2SConverter(head, Buffer, maxNumLength);
+        serializeLL(head, Buffer, maxNumLength);
         saveString(Buffer);
+        printf("Saved!\n");
         break;
     case 6:
-        head = stringParser(loadString(length+numLength+1));
+        printf("Loading...\n");
+        head = deSerializeLL(loadString());
         displayLinkedList(head);
+        break;
+    case 7:
+        printf("Copyright (C) 2023 Shashank M.\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under certain conditions");
         break;
     case 8:
         exit(0);

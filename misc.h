@@ -1,3 +1,8 @@
+/*
+AdvancedLinkedList - Linked Lists with Save/Load Function
+Copyright (C) 2023 Shashank M. 
+*/
+
 #ifndef misc
 #define misc
 
@@ -8,8 +13,8 @@
     #define FILE_NAME "lltemp" 
 
     int saveString(char *);
-    void l2SConverter(node *, char *, int);
-    char *loadString(int);
-    node *stringParser(char *);
+    void serializeLL(node *, char *, int);
+    char *loadString();
+    node *deSerializeLL(char *);
 
 #endif

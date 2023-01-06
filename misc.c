@@ -1,4 +1,7 @@
-// contains all functions involved with saving/loading ll
+/*
+AdvancedLinkedList - Linked Lists with Save/Load Function
+Copyright (C) 2023 Shashank M. 
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -9,14 +12,14 @@
 #include "ll.h"
 #include "misc.h"
 
-// pass it pointer to ll-int-string
-int saveString(char *arr)
+//copies a string to FILE_NAME (defined in misc.h)
+int saveString(char *dataString)
 {
     int fd;
     void *file_memory;
-    int length = strlen(arr);
+    int length = strlen(dataString);
 
-    /* Prepare a file large enough to hold an unsigned integer. */
+    //open file
     fd = open(FILE_NAME, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd < 0)
     {
@@ -24,6 +27,7 @@ int saveString(char *arr)
         exit(1);
     }
 
+    //grow filesize to length+1
     off_t lastoffset = lseek(fd, length + 1, SEEK_SET);
     if (lastoffset < 0)
     {
@@ -31,26 +35,31 @@ int saveString(char *arr)
     }
     else
     {
-        // grows file size to 1 page
+        // grows file size
         size_t bytesWritten = write(fd, " ", 1);
     }
 
+    //mapping memory
     file_memory = mmap(0, length + 1, PROT_WRITE, MAP_SHARED, fd, 0);
     if (file_memory == MAP_FAILED)
     {
         perror("mmap failed");
         exit(2);
     }
+
+    //can close fd, mmap has created a special reference to the file
     close(fd);
 
-    memcpy(file_memory, arr, length + 1);
+    //copy string into file
+    memcpy(file_memory, dataString, length + 1);
 
+    //release the memory
     munmap(file_memory, length + 1);
     return 0;
 }
 
-// pass head and length of ll, returns pointer to char arr containing the str
-void l2SConverter(node *head, char *buffer, int maxDigits)
+//Serializes LL data to String as "%d %d ..."
+void serializeLL(node *head, char *buffer, int maxDigits)
 {
     // initialize a temp buffer which will contain the ("%d ",temp->data) value
     char *tempBuff;
@@ -58,38 +67,57 @@ void l2SConverter(node *head, char *buffer, int maxDigits)
     for (node *temp = head; temp != 0; temp = temp->next)
     {
         sprintf(tempBuff, "%d ", temp->data);
+        //concatenate to buffer
         strcat(buffer, tempBuff);
     }
 }
 
-char *loadString(int totalLength)
+//read file and return file_info as string
+char *loadString()
 {
     int fd;
     void *file_memory;
     char *llString;
-    llString = (char *)calloc(totalLength, sizeof(char));
-    /* Open the file. */
-    fd = open(FILE_NAME, O_RDONLY, S_IRUSR | S_IWUSR);
+    struct stat sb;
+
+    //open the file
+    fd = open(FILE_NAME, O_RDONLY, S_IRUSR);
     if (fd < 0)
     {
         printf("NO SAVES Found");
         return NULL;
     }
-    /* Create the memory mapping. */
+
+    //get filesize
+    if (fstat(fd, &sb) == -1)
+    {
+        perror("fstat error");
+    }
+    int totalLength = sb.st_size;
+
+    //use filesize to allocate sufficient sized memory
+    llString = (char *)calloc(totalLength, sizeof(char));
+
+    //Map Memory
     file_memory = mmap(0, totalLength, PROT_READ, MAP_SHARED, fd, 0);
     close(fd);
-    /* Read the integer, print it out, and double it. */
+
+    //Copy from mapped memory into buffer
     memcpy(llString, file_memory, totalLength);
-    /* Release the memory (unnecessary because the program exits). */
+
+    //release memory
     munmap(file_memory, totalLength);
     return llString;
 }
 
-node *stringParser(char *dataString)
+// Deserialize ll from String
+node *deSerializeLL(char *dataString)
 {
     node *head = 0, *newnode, *temp;
     int tempNum;
     char *token;
+
+    //breaks down string using delimiter into tokens, token takes values serially
     for (token = strtok(dataString, " "); token != NULL; token = strtok(NULL, " "))
     {
         newnode = (node *)malloc(sizeof(node));
