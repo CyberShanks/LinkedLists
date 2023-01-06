@@ -9,7 +9,6 @@
 #include "ll.h"
 #include "misc.h"
 
-
 // pass it pointer to ll-int-string
 int saveString(char *arr)
 {
@@ -36,17 +35,17 @@ int saveString(char *arr)
         size_t bytesWritten = write(fd, " ", 1);
     }
 
-    file_memory = mmap(0, length+1, PROT_WRITE, MAP_SHARED, fd, 0);
+    file_memory = mmap(0, length + 1, PROT_WRITE, MAP_SHARED, fd, 0);
     if (file_memory == MAP_FAILED)
     {
         perror("mmap failed");
         exit(2);
     }
+    close(fd);
 
     memcpy(file_memory, arr, length + 1);
 
     munmap(file_memory, length + 1);
-    close(fd);
     return 0;
 }
 
@@ -61,4 +60,50 @@ void l2SConverter(node *head, char *buffer, int maxDigits)
         sprintf(tempBuff, "%d ", temp->data);
         strcat(buffer, tempBuff);
     }
+}
+
+char *loadString(int totalLength)
+{
+    int fd;
+    void *file_memory;
+    char *llString;
+    llString = (char *)calloc(totalLength, sizeof(char));
+    /* Open the file. */
+    fd = open(FILE_NAME, O_RDONLY, S_IRUSR | S_IWUSR);
+    if (fd < 0)
+    {
+        printf("NO SAVES Found");
+        return NULL;
+    }
+    /* Create the memory mapping. */
+    file_memory = mmap(0, totalLength, PROT_READ, MAP_SHARED, fd, 0);
+    close(fd);
+    /* Read the integer, print it out, and double it. */
+    memcpy(llString, file_memory, totalLength);
+    /* Release the memory (unnecessary because the program exits). */
+    munmap(file_memory, totalLength);
+    return llString;
+}
+
+node *stringParser(char *dataString)
+{
+    node *head = 0, *newnode, *temp;
+    int tempNum;
+    char *token;
+    for (token = strtok(dataString, " "); token != NULL; token = strtok(NULL, " "))
+    {
+        newnode = (node *)malloc(sizeof(node));
+        newnode->data = atoi(token);
+        newnode->next = 0;
+        if (head == 0)
+        {
+            head = temp = newnode;
+        }
+        else
+        {
+            temp->next = newnode;
+            temp = newnode;
+        }
+    }
+    return head;
 }

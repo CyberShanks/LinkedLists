@@ -9,5 +9,7 @@
 
     int saveString(char *);
     void l2SConverter(node *, char *, int);
+    char *loadString(int);
+    node *stringParser(char *);
 
 #endif

@@ -22,6 +22,7 @@ int menu()
     printf("3.Access Value at a Position\n");
     printf("4.Reverse Linked List?\n");
     printf("5.Save Current Linked List\n");
+    printf("6.Load Linked List\n");
     printf("8.Exit\n>> ");
     scanf("%d", &choice);
     switch (choice)
@@ -125,9 +126,9 @@ int menu()
         l2SConverter(head, Buffer, maxNumLength);
         saveString(Buffer);
         break;
-    case 7:
-        // probably use message queue to store the linked list
-        // saveLinkedList();
+    case 6:
+        head = stringParser(loadString(length+numLength+1));
+        displayLinkedList(head);
         break;
     case 8:
         exit(0);
